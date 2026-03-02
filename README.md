@@ -6,7 +6,7 @@ A production-ready multi-agent AI system for comprehensive analysis of arXiv res
 
 A complete demonstration of the system is available at:
 ```
-demo/take-home demo.mov
+[demo/take-home demo.mov](https://drive.google.com/file/d/1Pe63PJfpb4wZZfiU2Cz7cBirp6cavbxj/view?usp=sharing)
 ```
 
 The demo showcases:
