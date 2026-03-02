@@ -418,19 +418,47 @@ def main(url: Optional[str] = None):
         )
         sys.exit(1)
     
-    # Initialize and run analyzer
+    # Initialize analyzer
     analyzer = CLIAnalyzer()
     
-    if url:
-        # If URL provided via command line, set it and run
-        console.print(f"[cyan]Using provided URL: {url}[/cyan]")
-        analyzer.get_user_input = lambda: url
-    
-    try:
-        asyncio.run(analyzer.run_full_analysis())
-    except Exception as e:
-        console.print(f"[red]Fatal error: {e}[/red]")
-        sys.exit(1)
+    # Continuous analysis loop
+    while True:
+        try:
+            if url:
+                # If URL provided via command line, use it only for first iteration
+                console.print(f"[cyan]Using provided URL: {url}[/cyan]")
+                analyzer.get_user_input = lambda: url
+                asyncio.run(analyzer.run_full_analysis())
+                url = None  # Clear URL so next iteration prompts user
+            else:
+                # Normal interactive mode
+                asyncio.run(analyzer.run_full_analysis())
+            
+            # Ask if user wants to analyze another paper
+            console.print("\n" + "="*80)
+            continue_analysis = Prompt.ask(
+                "\n[bold cyan]Would you like to analyze another paper?[/bold cyan]",
+                choices=["y", "n"],
+                default="y"
+            )
+            
+            if continue_analysis.lower() != "y":
+                console.print("\n[bold green]👋 Thank you for using the Research Paper Analyzer![/bold green]")
+                break
+                
+        except KeyboardInterrupt:
+            console.print("\n[yellow]👋 Goodbye![/yellow]")
+            break
+        except Exception as e:
+            console.print(f"[red]Fatal error: {e}[/red]")
+            # Ask if user wants to try again after error
+            retry = Prompt.ask(
+                "\n[yellow]Would you like to try again?[/yellow]",
+                choices=["y", "n"],
+                default="n"
+            )
+            if retry.lower() != "y":
+                sys.exit(1)
 
 if __name__ == "__main__":
     main()
