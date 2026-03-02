@@ -1,0 +1,13 @@
+langchain
+langchain-google-genai
+langgraph
+pydantic
+python-dotenv
+fastapi
+uvicorn
+tiktoken
+rich
+click
+requests
+beautifulsoup4
+markdownify
